@@ -1,6 +1,6 @@
 """
-Document Processor for What If Wizard
-Handles PDF text extraction and vector storage using ChromaDB
+Hybrid Document Processor for What If Wizard
+Uses ByteZ API for LLM and handles embeddings with fallback options
 """
 
 import os
@@ -12,13 +12,17 @@ from chromadb.config import Settings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
+import numpy as np
+from sentence_transformers import SentenceTransformer
+import warnings
+warnings.filterwarnings("ignore")
 
 
-class DocumentProcessor:
-    """Handles document processing, text extraction, and vector storage."""
+class HybridDocumentProcessor:
+    """Handles document processing with ByteZ LLM and fallback embedding options."""
     
     def __init__(self):
-        """Initialize the document processor with ChromaDB and OpenAI embeddings."""
+        """Initialize the hybrid document processor."""
         # Initialize ChromaDB client
         self.client = chromadb.PersistentClient(
             path="./chroma_db",
@@ -28,10 +32,8 @@ class DocumentProcessor:
             )
         )
         
-        # Initialize OpenAI embeddings
-        self.embeddings = OpenAIEmbeddings(
-            openai_api_key=os.getenv('OPENAI_API_KEY')
-        )
+        # Try to initialize embeddings with fallback options
+        self.embeddings = self._initialize_embeddings()
         
         # Initialize text splitter for chunking documents
         self.text_splitter = RecursiveCharacterTextSplitter(
@@ -43,17 +45,56 @@ class DocumentProcessor:
         
         # Store active collections
         self.collections = {}
+        
+        print(f"✅ Hybrid Document Processor initialized with {type(self.embeddings).__name__}")
+    
+    def _initialize_embeddings(self):
+        """Initialize embeddings with fallback options."""
+        # Option 1: Try OpenAI embeddings if key is valid
+        openai_key = os.getenv('OPENAI_API_KEY')
+        if openai_key and not openai_key.startswith('sk-abcdef') and len(openai_key) > 20:
+            try:
+                print("🔄 Trying OpenAI embeddings...")
+                embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
+                # Test with a simple embedding
+                test_embedding = embeddings.embed_query("test")
+                if len(test_embedding) > 0:
+                    print("✅ OpenAI embeddings initialized successfully")
+                    return embeddings
+            except Exception as e:
+                print(f"⚠️ OpenAI embeddings failed: {str(e)}")
+        
+        # Option 2: Try ByteZ API for embeddings (if they support it)
+        bytez_key = os.getenv('BYTEZ_API_KEY')
+        if bytez_key:
+            try:
+                print("🔄 Trying ByteZ API for embeddings...")
+                embeddings = OpenAIEmbeddings(
+                    model="text-embedding-ada-002",
+                    openai_api_base="https://api.bytez.com/v1",
+                    openai_api_key=bytez_key
+                )
+                # Test with a simple embedding
+                test_embedding = embeddings.embed_query("test")
+                if len(test_embedding) > 0:
+                    print("✅ ByteZ embeddings initialized successfully")
+                    return embeddings
+            except Exception as e:
+                print(f"⚠️ ByteZ embeddings failed: {str(e)}")
+        
+        # Option 3: Fallback to local sentence-transformers
+        try:
+            print("🔄 Falling back to local SentenceTransformer...")
+            return LocalEmbeddings()
+        except Exception as e:
+            print(f"⚠️ Local embeddings failed: {str(e)}")
+        
+        # Option 4: Final fallback to simple embeddings
+        print("⚠️ Using simple hash-based embeddings as final fallback")
+        return SimpleEmbeddings()
     
     def extract_text_from_pdf(self, file_path: str) -> str:
-        """
-        Extract text from a PDF file.
-        
-        Args:
-            file_path (str): Path to the PDF file
-            
-        Returns:
-            str: Extracted text from the PDF
-        """
+        """Extract text from a PDF file."""
         try:
             text = ""
             with open(file_path, 'rb') as file:
@@ -75,29 +116,12 @@ class DocumentProcessor:
             raise Exception(f"Error extracting text from PDF: {str(e)}")
     
     def chunk_text(self, text: str) -> List[str]:
-        """
-        Split text into chunks for vector storage.
-        
-        Args:
-            text (str): Text to be chunked
-            
-        Returns:
-            List[str]: List of text chunks
-        """
+        """Split text into chunks for vector storage."""
         chunks = self.text_splitter.split_text(text)
         return [chunk.strip() for chunk in chunks if chunk.strip()]
     
     def process_document(self, file_path: str, filename: str) -> str:
-        """
-        Process a document: extract text, chunk it, and store in vector database.
-        
-        Args:
-            file_path (str): Path to the document file
-            filename (str): Original filename
-            
-        Returns:
-            str: Document ID for future reference
-        """
+        """Process a document: extract text, chunk it, and store in vector database."""
         try:
             # Generate unique document ID
             document_id = str(uuid.uuid4())
@@ -139,7 +163,10 @@ class DocumentProcessor:
             print("Computing embeddings and storing in vector database...")
             
             # Get embeddings for all chunks
-            embeddings = self.embeddings.embed_documents(documents)
+            if hasattr(self.embeddings, 'embed_documents'):
+                embeddings = self.embeddings.embed_documents(documents)
+            else:
+                embeddings = [self.embeddings.embed_query(doc) for doc in documents]
             
             # Add to ChromaDB
             collection.add(
@@ -159,15 +186,7 @@ class DocumentProcessor:
             raise Exception(f"Error processing document {filename}: {str(e)}")
     
     def get_collection(self, document_id: str):
-        """
-        Get the ChromaDB collection for a document.
-        
-        Args:
-            document_id (str): Document ID
-            
-        Returns:
-            Collection: ChromaDB collection
-        """
+        """Get the ChromaDB collection for a document."""
         if document_id in self.collections:
             return self.collections[document_id]
         
@@ -181,17 +200,7 @@ class DocumentProcessor:
             raise ValueError(f"No collection found for document ID: {document_id}")
     
     def search_similar_chunks(self, query: str, document_id: str, k: int = 5) -> List[Dict[str, Any]]:
-        """
-        Search for similar chunks in the document.
-        
-        Args:
-            query (str): Search query
-            document_id (str): Document ID to search in
-            k (int): Number of similar chunks to return
-            
-        Returns:
-            List[Dict[str, Any]]: List of similar chunks with metadata
-        """
+        """Search for similar chunks in the document."""
         try:
             collection = self.get_collection(document_id)
             
@@ -224,15 +233,7 @@ class DocumentProcessor:
             raise Exception(f"Error searching document: {str(e)}")
     
     def clear_document(self, document_id: str) -> bool:
-        """
-        Clear/delete a document from the vector store.
-        
-        Args:
-            document_id (str): Document ID to clear
-            
-        Returns:
-            bool: True if successful
-        """
+        """Clear/delete a document from the vector store."""
         try:
             collection_name = f"doc_{document_id.replace('-', '_')}"
             
@@ -249,31 +250,56 @@ class DocumentProcessor:
         except Exception as e:
             print(f"Error clearing document {document_id}: {str(e)}")
             return False
+
+
+class LocalEmbeddings:
+    """Local embeddings using sentence-transformers."""
     
-    def get_document_stats(self, document_id: str) -> Dict[str, Any]:
-        """
-        Get statistics about a processed document.
-        
-        Args:
-            document_id (str): Document ID
-            
-        Returns:
-            Dict[str, Any]: Document statistics
-        """
+    def __init__(self):
         try:
-            collection = self.get_collection(document_id)
-            count = collection.count()
-            
-            # Get collection metadata
-            collection_info = collection.get(limit=1, include=["metadatas"])
-            metadata = collection_info['metadatas'][0] if collection_info['metadatas'] else {}
-            
-            return {
-                'document_id': document_id,
-                'filename': metadata.get('filename', 'Unknown'),
-                'chunk_count': count,
-                'total_chunks': metadata.get('chunk_count', count)
-            }
-        
+            # Use a lightweight model for embeddings
+            self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            print("✅ Local SentenceTransformer model loaded")
         except Exception as e:
-            raise Exception(f"Error getting document stats: {str(e)}")
+            print(f"❌ Failed to load SentenceTransformer: {e}")
+            raise
+    
+    def embed_query(self, text: str) -> List[float]:
+        """Embed a single text."""
+        embedding = self.model.encode(text)
+        return embedding.tolist()
+    
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        """Embed multiple documents."""
+        embeddings = self.model.encode(texts)
+        return embeddings.tolist()
+
+
+class SimpleEmbeddings:
+    """Simple hash-based embeddings as final fallback."""
+    
+    def __init__(self):
+        print("⚠️ Using simple hash-based embeddings (limited functionality)")
+    
+    def embed_query(self, text: str) -> List[float]:
+        """Create a simple hash-based embedding."""
+        import hashlib
+        
+        # Create a simple vector based on text characteristics
+        text_hash = hashlib.md5(text.encode()).hexdigest()
+        
+        # Convert hash to a fixed-size vector (384 dimensions to match sentence transformers)
+        vector = []
+        for i in range(0, len(text_hash), 2):
+            hex_pair = text_hash[i:i+2]
+            vector.append(int(hex_pair, 16) / 255.0)  # Normalize to 0-1
+        
+        # Pad or truncate to 384 dimensions
+        while len(vector) < 384:
+            vector.extend(vector[:384-len(vector)])
+        
+        return vector[:384]
+    
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        """Embed multiple documents."""
+        return [self.embed_query(text) for text in texts]

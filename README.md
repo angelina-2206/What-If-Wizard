@@ -1,279 +1,159 @@
 # What If Wizard 🧙‍♂️
 
-**AI-Powered Legal Document Assistant**
+*AI-Powered Legal Document Assistant*
 
-Transform static, complex legal documents into interactive simulations. What If Wizard allows users to upload legal documents and ask natural language questions about them, receiving instant, accurate answers directly sourced from the document's text.
+## Overview
 
-![What If Wizard Banner](https://via.placeholder.com/800x200/4f46e5/ffffff?text=What+If+Wizard)
+What If Wizard is an intelligent legal document analysis tool that helps you understand contracts, agreements, and other legal documents through natural language questions. Upload your PDF documents and get instant insights about your rights, obligations, and potential risks.
 
-## 🌟 Features
+## ✨ Features
 
-- **📄 PDF Document Upload**: Drag-and-drop or browse to upload PDF legal documents
-- **🤖 AI-Powered Q&A**: Ask questions in natural language about your documents
-- **🔍 RAG Technology**: Uses Retrieval-Augmented Generation for accurate, source-based answers
-- **💬 Chat Interface**: Intuitive chat-style interface for seamless interaction
-- **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **⚡ Real-time Processing**: Fast document processing and question answering
-- **🎯 Legal Focus**: Specialized prompts for legal document analysis
+- **🔍 Smart Document Analysis**: AI-powered extraction of key rights, obligations, and terms
+- **🚩 Red Flag Detection**: Automatically identifies potentially problematic clauses
+- **💬 Interactive Q&A**: Ask questions about your documents in plain English
+- **📊 Smart Summaries**: Get instant overviews of complex legal documents
+- **🎯 Contextual Questions**: AI-generated relevant questions based on your document
+- **🖥️ Modern UI**: Professional interface with smooth animations
+- **💰 Cost-Effective**: Uses local embeddings to minimize API costs
 
-## 🚀 Tech Stack
+## 🚀 Quick Start
 
-### Backend
-- **Python 3.8+**
-- **Flask** - Web framework
-- **LangChain** - LLM orchestration
-- **OpenAI GPT-3.5-turbo** - Language model
-- **ChromaDB** - Vector database
-- **PyPDF2** - PDF text extraction
-
-### Frontend
-- **HTML5** - Structure
-- **Modern CSS** - Styling with CSS variables
-- **Vanilla JavaScript** - Interactive functionality
-- **Fetch API** - HTTP requests
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Python 3.8 or higher**
-- **pip** (Python package manager)
-- **OpenAI API Key** (from [OpenAI Platform](https://platform.openai.com/))
-
-## 🛠️ Installation & Setup
-
-### 1. Clone the Repository
-
+### Option 1: Simple Run (Recommended)
 ```bash
-git clone <your-repo-url>
-cd what-if-wizard
+python run.py
 ```
 
-### 2. Create a Virtual Environment
+### Option 2: Manual Setup
+1. **Activate virtual environment**:
+   ```bash
+   # Windows
+   venv\Scripts\activate
+   
+   # Linux/Mac
+   source venv/bin/activate
+   ```
 
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
+2. **Start the backend**:
+   ```bash
+   cd backend
+   python app.py
+   ```
 
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
+3. **Open the frontend**:
+   - Open `frontend/index.html` in your web browser
+   - The backend will be running on http://127.0.0.1:5000
 
-### 3. Install Python Dependencies
+4. **Upload and analyze**:
+   - Drag & drop a PDF document
+   - Wait for processing to complete
+   - Explore smart summaries and red flags
+   - Ask questions about your document
 
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-### 4. Set Up Environment Variables
-
-```bash
-# Copy the template file
-cp .env.template .env
-
-# Edit the .env file with your actual values
-```
-
-**Required Environment Variables:**
-
-```env
-OPENAI_API_KEY=your-openai-api-key-here
-```
-
-**Get your OpenAI API Key:**
-1. Visit [OpenAI Platform](https://platform.openai.com/)
-2. Sign up or log in
-3. Navigate to API Keys section
-4. Create a new API key
-5. Copy and paste it into your `.env` file
-
-### 5. Run the Backend Server
-
-```bash
-cd backend
-python app.py
-```
-
-The backend server will start on `http://127.0.0.1:5000`
-
-### 6. Serve the Frontend
-
-You have several options to serve the frontend:
-
-**Option A: Simple HTTP Server (Python)**
-```bash
-cd frontend
-python -m http.server 8000
-```
-Then open `http://localhost:8000` in your browser.
-
-**Option B: Live Server (VS Code Extension)**
-1. Install the "Live Server" extension in VS Code
-2. Right-click on `frontend/index.html`
-3. Select "Open with Live Server"
-
-**Option C: Any Web Server**
-Simply serve the `frontend` directory with any web server of your choice.
-
-## 🎯 Usage
-
-### 1. Upload a Document
-- Open the application in your browser
-- Drag and drop a PDF file onto the upload area, or click "Choose PDF File"
-- Wait for the document to be processed (this may take a few seconds)
-
-### 2. Ask Questions
-- Once the document is processed, you'll see a chat interface
-- Use the sample question buttons for quick start
-- Or type your own questions about the document
-- Press Enter or click the send button
-
-### 3. Review Answers
-- The AI will provide answers based on the document content
-- Each answer includes a confidence level (high, medium, low)
-- Source information shows how many document sections were used
-
-### 4. Start Over
-- Click "New Document" to reset and upload a different document
-
-## 💡 Sample Questions
-
-Try asking questions like:
-
-- "What are my main obligations under this document?"
-- "What happens if I breach the terms of this agreement?"
-- "What are the termination conditions?"
-- "What fees or payments are required?"
-- "What are the key dates and deadlines?"
-- "What if I want to cancel early?"
-- "Under what circumstances can this agreement be modified?"
-
-## 🔧 Configuration
-
-### Backend Configuration
-
-The backend can be configured through environment variables:
-
-```env
-# Flask settings
-FLASK_ENV=development
-FLASK_DEBUG=True
-
-# OpenAI settings
-OPENAI_API_KEY=your-api-key-here
-
-# File upload limits
-MAX_FILE_SIZE=16777216  # 16MB in bytes
-```
-
-### Frontend Configuration
-
-The API base URL can be changed in `frontend/script.js`:
-
-```javascript
-this.API_BASE_URL = 'http://127.0.0.1:5000';
-```
-
-## 📁 Project Structure
+## 🏗️ Project Structure (Cleaned)
 
 ```
 what-if-wizard/
-│
-├── backend/
-│   ├── app.py                    # Main Flask application
-│   ├── document_processor.py     # PDF processing and vector storage
-│   ├── question_answerer.py      # RAG question answering
-│   └── requirements.txt          # Python dependencies
-│
 ├── frontend/
-│   ├── index.html               # Main HTML file
-│   ├── styles.css               # CSS styling
-│   └── script.js                # JavaScript functionality
-│
-├── uploads/                     # Temporary file uploads (auto-created)
-├── chroma_db/                   # ChromaDB vector store (auto-created)
-├── .env.template               # Environment variables template
-├── .gitignore                  # Git ignore rules
-└── README.md                   # This file
+│   ├── index.html          # Main UI with modern design
+│   ├── styles.css          # Professional styling
+│   └── script.js           # Enhanced frontend logic
+├── backend/
+│   ├── app.py              # Main Flask application
+│   ├── document_processor.py # PDF processing & embeddings
+│   └── requirements.txt    # Python dependencies
+├── uploads/                # Temporary file storage (auto-created)
+├── .env                    # API keys and configuration
+├── run.py                  # Simple startup script
+└── README.md
 ```
 
-## 🔒 Security Considerations
+## 🔧 Configuration
 
-- **API Keys**: Never commit your `.env` file or expose API keys
-- **File Uploads**: The application only accepts PDF files up to 16MB
-- **CORS**: Currently configured for development; adjust for production
-- **Input Validation**: All user inputs are validated and sanitized
+### API Keys Setup
+The application supports multiple AI providers:
 
-## 🚀 Deployment
+1. **ByteZ API** (Recommended for cost-effectiveness):
+   ```env
+   BYTEZ_API_KEY=your-bytez-api-key
+   ```
 
-### For Production Deployment:
+2. **OpenAI API** (Premium option):
+   ```env
+   OPENAI_API_KEY=your-openai-api-key
+   ```
 
-1. **Backend**:
-   - Use a production WSGI server like Gunicorn
-   - Set up proper environment variables
-   - Configure CORS for your domain
-   - Set up HTTPS
+### Hybrid Architecture
+- **Language Model**: ByteZ Llama-3-70B or OpenAI GPT
+- **Embeddings**: Local SentenceTransformer (free, private, fast)
+- **Vector Database**: ChromaDB (local storage)
+- **No per-query embedding costs!**
 
-2. **Frontend**:
-   - Serve static files through a web server (Nginx, Apache)
-   - Update API_BASE_URL to your production backend URL
-   - Enable gzip compression
+## 💡 Key Advantages
 
-3. **Database**:
-   - Consider using a more robust vector database for production
-   - Set up regular backups
+1. **Cost-Effective**: Local embeddings eliminate per-query costs
+2. **Privacy-First**: Document embeddings stay on your machine
+3. **Reliable**: Multiple fallback options ensure it always works
+4. **Fast**: Local embeddings are faster than API calls
+5. **Professional**: Modern UI with smooth animations and responsive design
 
-## 🐛 Troubleshooting
+## 🔒 Security & Privacy
 
-### Common Issues:
+- Documents processed locally and deleted after analysis
+- Embeddings computed and stored locally
+- Only question/answer text sent to AI APIs
+- No document content stored on external servers
 
-**"Unable to connect to the backend API"**
-- Ensure the backend server is running on `http://127.0.0.1:5000`
-- Check that no firewall is blocking the connection
+## 🛠️ Advanced Usage
 
-**"OpenAI API key not set"**
-- Verify your `.env` file contains the correct API key
-- Make sure the `.env` file is in the `backend` directory
+### Smart Summary Features
+- Key rights extraction
+- Obligation identification
+- Risk level assessment
+- Termination conditions
+- Important dates
 
-**"Error extracting text from PDF"**
-- Ensure the PDF is not encrypted or password-protected
-- Try with a different PDF file
+### Red Flag Detection
+- Broad indemnification clauses
+- Automatic renewal terms
+- Unlimited liability exposure
+- Restrictive covenants
+- Unusual penalty clauses
 
-**"File too large"**
-- Maximum file size is 16MB
-- Compress your PDF or use a smaller file
+### Interactive Features
+- Context-aware question suggestions
+- Visual citations with source highlighting
+- Confidence indicators for AI responses
+- Toast notifications for user feedback
 
-## 🤝 Contributing
+## 📋 Requirements
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- Python 3.8+
+- Modern web browser
+- 2GB RAM (for local embeddings)
+- Internet connection (for AI API calls)
 
-## 📄 License
+## 🚨 Troubleshooting
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Common Solutions
+1. **API Errors**: Check your API keys in `.env` file
+2. **Slow Processing**: First-time download of embedding model (~500MB)
+3. **CORS Issues**: Ensure backend is running on port 5000
+4. **PDF Issues**: Ensure PDFs contain extractable text
 
-## 🙏 Acknowledgments
+### Get Help
+- Check the browser console for error messages
+- Verify all dependencies are installed
+- Ensure virtual environment is activated
 
-- **OpenAI** for providing the GPT models
-- **LangChain** for the LLM orchestration framework
-- **ChromaDB** for the vector database
-- **Flask** for the web framework
-- **Inter Font** for the beautiful typography
+## 🎯 Example Questions
 
-## 📞 Support
-
-If you encounter any issues or have questions:
-
-1. Check the troubleshooting section above
-2. Search existing GitHub issues
-3. Create a new issue with detailed information
+- "What are my main obligations under this contract?"
+- "How can I terminate this agreement?"
+- "What red flags should I be concerned about?"
+- "What are the payment terms and deadlines?"
+- "What happens if I breach this contract?"
+- "Are there any automatic renewal clauses?"
 
 ---
 
-**Made with ❤️ by the What If Wizard Team**
+*What If Wizard - Making legal documents accessible through AI* 🧙‍♂️⚖️

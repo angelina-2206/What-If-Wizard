@@ -7,20 +7,42 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
+        <!-- Animated Background -->
+        <div class="bg-animation">
+            <div class="bg-particle"></div>
+            <div class="bg-particle"></div>
+            <div class="bg-particle"></div>
+            <div class="bg-particle"></div>
+            <div class="bg-particle"></div>
+        </div>
+
         <!-- Header -->
         <header class="header">
             <div class="header-content">
                 <div class="logo">
-                    <h1>✨ What If Wizard</h1>
-                    <p>AI-Powered Legal Document Assistant</p>
+                    <div class="logo-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>What If Wizard</h1>
+                        <p>AI-Powered Legal Document Assistant</p>
+                    </div>
                 </div>
-                <button id="reset-btn" class="reset-btn" style="display: none;">
-                    🔄 New Document
-                </button>
+                <nav class="header-nav">
+                    <button id="reset-btn" class="nav-btn" style="display: none;">
+                        <i class="fas fa-refresh"></i>
+                        <span>New Document</span>
+                    </button>
+                    <button class="nav-btn" id="help-btn">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help</span>
+                    </button>
+                </nav>
             </div>
         </header>
 
@@ -28,105 +50,276 @@
         <main class="main-content">
             <!-- Upload Section -->
             <section id="upload-section" class="upload-section">
-                <div class="upload-container">
-                    <div id="drop-zone" class="drop-zone">
-                        <div class="drop-zone-content">
-                            <div class="upload-icon">📄</div>
-                            <h2>Upload Your Legal Document</h2>
-                            <p>Drag and drop your PDF file here, or click to browse</p>
-                            <input type="file" id="file-input" accept=".pdf" hidden>
-                            <button type="button" id="browse-btn" class="browse-btn">Choose PDF File</button>
-                        </div>
-                        <div id="upload-progress" class="upload-progress" style="display: none;">
-                            <div class="progress-bar">
-                                <div id="progress-fill" class="progress-fill"></div>
+                <div class="upload-hero">
+                    <div class="hero-content">
+                        <h2 class="hero-title">Analyze Your Legal Documents</h2>
+                        <p class="hero-subtitle">Upload your contract, agreement, or legal document and get instant AI-powered insights</p>
+                    </div>
+                    
+                    <div class="upload-widget">
+                        <div id="drop-zone" class="drop-zone">
+                            <div class="drop-zone-content">
+                                <div class="upload-animation">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-pulse"></div>
+                                </div>
+                                <h3>Drop your PDF here</h3>
+                                <p>or click to browse files</p>
+                                <input type="file" id="file-input" accept=".pdf" hidden>
+                                <button type="button" id="browse-btn" class="browse-btn">
+                                    <i class="fas fa-folder-open"></i>
+                                    Choose File
+                                </button>
+                                <div class="file-requirements">
+                                    <small><i class="fas fa-info-circle"></i> PDF files up to 16MB</small>
+                                </div>
                             </div>
-                            <p id="upload-status">Processing your document...</p>
+                            <div id="upload-progress" class="upload-progress" style="display: none;">
+                                <div class="progress-animation">
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" class="progress-bg"></circle>
+                                            <circle cx="50" cy="50" r="45" class="progress-bar" id="progress-circle"></circle>
+                                        </svg>
+                                        <div class="progress-text">
+                                            <i class="fas fa-cogs fa-spin"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="upload-status-text">
+                                    <h4 id="upload-status">Processing your document...</h4>
+                                    <p id="upload-substatus">This may take a few moments</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Chat Section -->
-            <section id="chat-section" class="chat-section" style="display: none;">
-                <div class="chat-container">
-                    <!-- Document Info -->
-                    <div id="document-info" class="document-info">
-                        <div class="info-content">
-                            <span class="doc-icon">📄</span>
-                            <div class="doc-details">
-                                <span id="doc-name" class="doc-name">Document loaded</span>
-                                <span class="doc-status">Ready for questions</span>
+            <!-- Analysis Dashboard -->
+            <section id="analysis-section" class="analysis-section" style="display: none;">
+                <div class="analysis-container">
+                    <!-- Document Header -->
+                    <div class="document-header">
+                        <div class="doc-info">
+                            <div class="doc-icon-large">
+                                <i class="fas fa-file-pdf"></i>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Questions -->
-                    <div class="sample-questions">
-                        <h3>Try asking:</h3>
-                        <div class="question-buttons">
-                            <button class="question-btn" data-question="What are my main obligations under this document?">
-                                What are my main obligations?
-                            </button>
-                            <button class="question-btn" data-question="What happens if I breach the terms of this agreement?">
-                                What if I breach the terms?
-                            </button>
-                            <button class="question-btn" data-question="What are the termination conditions?">
-                                What are the termination conditions?
-                            </button>
-                            <button class="question-btn" data-question="What fees or payments are required?">
-                                What fees are required?
-                            </button>
-                            <button class="question-btn" data-question="What are the key dates and deadlines?">
-                                What are key dates and deadlines?
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Chat Messages -->
-                    <div id="chat-messages" class="chat-messages">
-                        <div class="welcome-message">
-                            <div class="message bot-message">
-                                <div class="message-avatar">🤖</div>
-                                <div class="message-content">
-                                    <div class="message-text">
-                                        Hello! I'm your What If Wizard assistant. I've processed your document and I'm ready to answer questions about it. You can ask me anything about the terms, conditions, obligations, or "what-if" scenarios related to your document.
-                                    </div>
+                            <div class="doc-meta">
+                                <h2 id="doc-name" class="doc-title">Document Analysis</h2>
+                                <p class="doc-subtitle">Ready for your questions</p>
+                                <div class="doc-stats">
+                                    <span class="stat-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span id="processing-time">Processed in 0s</span>
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span id="chunk-count">0 sections analyzed</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Chat Input -->
-                    <div class="chat-input-container">
-                        <form id="question-form" class="question-form">
-                            <div class="input-group">
-                                <input 
-                                    type="text" 
-                                    id="question-input" 
-                                    placeholder="Ask a question about your document..." 
-                                    autocomplete="off"
-                                >
-                                <button type="submit" id="send-btn" class="send-btn">
-                                    <span class="send-icon">→</span>
+                    <div class="analysis-grid">
+                        <!-- Smart Summary Panel -->
+                        <div class="panel smart-summary-panel">
+                            <div class="panel-header">
+                                <div class="panel-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h3>Smart Summary</h3>
+                                <div class="panel-actions">
+                                    <button class="action-btn" id="refresh-summary">
+                                        <i class="fas fa-refresh"></i>
+                                    </button>
+                                    <button class="action-btn" id="expand-summary">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="panel-content" id="smart-summary-content">
+                                <div class="summary-loading">
+                                    <div class="loading-spinner small"></div>
+                                    <p>Generating smart summary...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Red Flag Alerts -->
+                        <div class="panel red-flags-panel">
+                            <div class="panel-header">
+                                <div class="panel-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <h3>Red Flag Alerts</h3>
+                                <span class="alert-count" id="red-flag-count">0</span>
+                            </div>
+                            <div class="panel-content" id="red-flags-content">
+                                <div class="no-alerts">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <p>No critical issues detected</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Questions Panel -->
+                        <div class="panel questions-panel">
+                            <div class="panel-header">
+                                <div class="panel-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <h3>Suggested Questions</h3>
+                                <button class="action-btn" id="generate-questions">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
                                 </button>
                             </div>
-                        </form>
+                            <div class="panel-content" id="questions-content">
+                                <div class="question-categories">
+                                    <div class="question-category">
+                                        <h4><i class="fas fa-gavel"></i> Rights & Obligations</h4>
+                                        <div class="question-list" id="rights-questions"></div>
+                                    </div>
+                                    <div class="question-category">
+                                        <h4><i class="fas fa-times-circle"></i> Termination & Breach</h4>
+                                        <div class="question-list" id="termination-questions"></div>
+                                    </div>
+                                    <div class="question-category">
+                                        <h4><i class="fas fa-dollar-sign"></i> Financial Terms</h4>
+                                        <div class="question-list" id="financial-questions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Interface -->
+                        <div class="panel chat-panel">
+                            <div class="panel-header">
+                                <div class="panel-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h3>AI Assistant</h3>
+                                <div class="chat-status">
+                                    <div class="status-indicator online"></div>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="panel-content chat-content">
+                                <div id="chat-messages" class="chat-messages">
+                                    <div class="welcome-message">
+                                        <div class="message bot-message">
+                                            <div class="message-avatar">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <div class="message-content">
+                                                <div class="message-text">
+                                                    Welcome! I've analyzed your document and I'm ready to help. Ask me anything about the terms, conditions, or implications.
+                                                </div>
+                                                <div class="message-time">
+                                                    Just now
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat-input-container">
+                                    <form id="question-form" class="question-form">
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="text" 
+                                                id="question-input" 
+                                                placeholder="Ask anything about your document..." 
+                                                autocomplete="off"
+                                            >
+                                            <button type="button" class="attachment-btn" id="voice-btn">
+                                                <i class="fas fa-microphone"></i>
+                                            </button>
+                                            <button type="submit" id="send-btn" class="send-btn">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-suggestions" id="input-suggestions"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
 
+        <!-- Citation Modal -->
+        <div id="citation-modal" class="modal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-quote-left"></i> Document Citation</h3>
+                    <button class="modal-close" id="close-citation">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="citation-content">
+                    <!-- Citation content will be inserted here -->
+                </div>
+            </div>
+        </div>
+
         <!-- Loading Overlay -->
         <div id="loading-overlay" class="loading-overlay" style="display: none;">
             <div class="loading-content">
-                <div class="loading-spinner"></div>
+                <div class="loading-animation">
+                    <div class="loading-brain">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="loading-waves">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                    </div>
+                </div>
+                <h3 id="loading-title">AI is thinking...</h3>
                 <p id="loading-text">Processing your question...</p>
             </div>
         </div>
 
         <!-- Toast Notifications -->
         <div id="toast-container" class="toast-container"></div>
+
+        <!-- Help Modal -->
+        <div id="help-modal" class="modal" style="display: none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-question-circle"></i> How to Use What If Wizard</h3>
+                    <button class="modal-close" id="close-help">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-content">
+                        <div class="help-section">
+                            <h4><i class="fas fa-upload"></i> Upload Your Document</h4>
+                            <p>Drag and drop your PDF legal document or click to browse. We support contracts, agreements, and legal documents up to 16MB.</p>
+                        </div>
+                        <div class="help-section">
+                            <h4><i class="fas fa-lightbulb"></i> Smart Summary</h4>
+                            <p>Get an instant overview of your document including key rights, obligations, and termination conditions.</p>
+                        </div>
+                        <div class="help-section">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Red Flag Alerts</h4>
+                            <p>Identify potentially problematic clauses and unfavorable terms that need your attention.</p>
+                        </div>
+                        <div class="help-section">
+                            <h4><i class="fas fa-comments"></i> Ask Questions</h4>
+                            <p>Use the AI chat to ask specific questions about your document. Click on suggested questions or type your own.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
