@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What If Wizard - AI Legal Document Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>✨ What If Wizard</h1>
+                    <p>AI-Powered Legal Document Assistant</p>
+                </div>
+                <button id="reset-btn" class="reset-btn" style="display: none;">
+                    🔄 New Document
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section id="upload-section" class="upload-section">
+                <div class="upload-container">
+                    <div id="drop-zone" class="drop-zone">
+                        <div class="drop-zone-content">
+                            <div class="upload-icon">📄</div>
+                            <h2>Upload Your Legal Document</h2>
+                            <p>Drag and drop your PDF file here, or click to browse</p>
+                            <input type="file" id="file-input" accept=".pdf" hidden>
+                            <button type="button" id="browse-btn" class="browse-btn">Choose PDF File</button>
+                        </div>
+                        <div id="upload-progress" class="upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div id="progress-fill" class="progress-fill"></div>
+                            </div>
+                            <p id="upload-status">Processing your document...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section id="chat-section" class="chat-section" style="display: none;">
+                <div class="chat-container">
+                    <!-- Document Info -->
+                    <div id="document-info" class="document-info">
+                        <div class="info-content">
+                            <span class="doc-icon">📄</span>
+                            <div class="doc-details">
+                                <span id="doc-name" class="doc-name">Document loaded</span>
+                                <span class="doc-status">Ready for questions</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Questions -->
+                    <div class="sample-questions">
+                        <h3>Try asking:</h3>
+                        <div class="question-buttons">
+                            <button class="question-btn" data-question="What are my main obligations under this document?">
+                                What are my main obligations?
+                            </button>
+                            <button class="question-btn" data-question="What happens if I breach the terms of this agreement?">
+                                What if I breach the terms?
+                            </button>
+                            <button class="question-btn" data-question="What are the termination conditions?">
+                                What are the termination conditions?
+                            </button>
+                            <button class="question-btn" data-question="What fees or payments are required?">
+                                What fees are required?
+                            </button>
+                            <button class="question-btn" data-question="What are the key dates and deadlines?">
+                                What are key dates and deadlines?
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="welcome-message">
+                            <div class="message bot-message">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <div class="message-text">
+                                        Hello! I'm your What If Wizard assistant. I've processed your document and I'm ready to answer questions about it. You can ask me anything about the terms, conditions, obligations, or "what-if" scenarios related to your document.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input-container">
+                        <form id="question-form" class="question-form">
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    id="question-input" 
+                                    placeholder="Ask a question about your document..." 
+                                    autocomplete="off"
+                                >
+                                <button type="submit" id="send-btn" class="send-btn">
+                                    <span class="send-icon">→</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p id="loading-text">Processing your question...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
