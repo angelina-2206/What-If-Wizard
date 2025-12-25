@@ -8,13 +8,13 @@ What If Wizard is an intelligent legal document analysis tool that helps you und
 
 ## ✨ Features
 
-- **🔍 Smart Document Analysis**: AI-powered extraction of key rights, obligations, and terms
-- **🚩 Red Flag Detection**: Automatically identifies potentially problematic clauses
-- **💬 Interactive Q&A**: Ask questions about your documents in plain English
-- **📊 Smart Summaries**: Get instant overviews of complex legal documents
-- **🎯 Contextual Questions**: AI-generated relevant questions based on your document
-- **🖥️ Modern UI**: Professional interface with smooth animations
-- **💰 Cost-Effective**: Uses local embeddings to minimize API costs
+- **Smart Document Analysis**: AI-powered extraction of key rights, obligations, and terms
+- **Red Flag Detection**: Automatically identifies potentially problematic clauses
+- **Interactive Q&A**: Ask questions about your documents in plain English
+- **Smart Summaries**: Get instant overviews of complex legal documents
+- **Contextual Questions**: AI-generated relevant questions based on your document
+- **Modern UI**: Professional interface with smooth animations
+- **Cost-Effective**: Uses local embeddings to minimize API costs
 
 ## 🚀 Quick Start
 
