@@ -525,7 +525,7 @@ body {
 .analysis-section {
     animation: fadeIn 0.5s ease-out;
     padding: var(--space-xl) 2%;
-    height: calc(100vh - 80px); /* Fill remaining viewport */
+    height: calc(100vh - 150px); /* Fill remaining viewport, accounting for header and footer */
     display: flex;
     flex-direction: column;
 }
@@ -1382,8 +1382,12 @@ body {
 }
 
 .toast.success {
-    border-left: 4px solid var(--success-500);
-    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(11, 15, 42, 0.9) 30%);
+    border-left: 4px solid var(--success-400);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.25) 0%, rgba(11, 15, 42, 0.95) 40%);
+}
+.toast.success .toast-message {
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .toast.error {
