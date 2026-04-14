@@ -1430,6 +1430,19 @@ body {
     100% { transform: translateX(0) scale(1); opacity: 1; }
 }
 
+/* Global Footer */
+.app-footer {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: auto;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 /* Markdown Styles */
 .markdown-content h3, .markdown-content h4 {
     color: var(--text-primary);
