@@ -1008,16 +1008,16 @@ class WhatIfWizard {
     showToast(message, type = 'success', duration = 5000) {
         const toastId = Date.now().toString();
         const iconMap = {
-            success: '✅',
-            error: '❌',
-            warning: '⚠️'
+            success: '<i class="fas fa-check-circle"></i>',
+            error: '<i class="fas fa-exclamation-circle"></i>',
+            warning: '<i class="fas fa-exclamation-triangle"></i>'
         };
 
         const toastHtml = `
             <div class="toast ${type}" id="toast-${toastId}">
-                <span class="toast-icon">${iconMap[type] || '📋'}</span>
+                <span class="toast-icon">${iconMap[type] || '<i class="fas fa-info-circle"></i>'}</span>
                 <span class="toast-message">${this.escapeHtml(message)}</span>
-                <button class="toast-close" onclick="document.getElementById('toast-${toastId}').remove()">
+                <button class="toast-close" title="Dismiss" onclick="document.getElementById('toast-${toastId}').remove()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
