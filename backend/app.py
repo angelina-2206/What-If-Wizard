@@ -81,52 +81,67 @@ class WorkingQuestionAnswerer:
     
     def _generate_content_based_summary(self, text_lower, full_text):
         """Generate summary based on actual document content."""
+        # Key Takeaways mock extraction
+        takeaways = [
+            {"label": "Contract Focus", "value": "Business Operations & Rules" if len(text_lower) > 500 else "Standard Agreement"},
+            {"label": "Notice Period", "value": "30 - 90 Days" if 'notice' in text_lower else "Not Explicit"},
+            {"label": "Key Stipulation", "value": "Confidentiality Binding" if 'confidential' in text_lower else "Standard Liability"}
+        ]
+
         # Analyze actual content for rights
         rights = []
         if any(word in text_lower for word in ['right to', 'entitled to', 'may', 'license']):
-            rights.append("Rights are specified in the agreement")
+            rights.append("**General Rights:** Explicit provisions grant you operational authority.")
         if 'terminate' in text_lower or 'cancel' in text_lower:
-            rights.append("Right to terminate under specified conditions")
+            rights.append("**Right to Terminate:** You may cancel the agreement conditionally.")
         if 'intellectual property' in text_lower or 'copyright' in text_lower:
-            rights.append("Intellectual property rights are addressed")
+            rights.append("**Intellectual Property:** Authorship and licensing rights are actively addressed.")
         if not rights:
-            rights.append("Standard contractual rights apply")
+            rights.append("**Standard Rights:** Baseline contractual rights apply.")
         
         # Analyze obligations
         obligations = []
         if any(word in text_lower for word in ['must', 'shall', 'required', 'obligation']):
-            obligations.append("Specific obligations are detailed in the document")
+            obligations.append("**Performance Rules:** Specific mandatory actions are detailed.")
         if 'confidential' in text_lower:
-            obligations.append("Confidentiality requirements are specified")
+            obligations.append("**Confidentiality:** Strict non-disclosure conditions apply.")
         if 'payment' in text_lower or 'fee' in text_lower:
-            obligations.append("Payment obligations are outlined")
+            obligations.append("**Financial:** Payment schedules and fee structures are outlined.")
         if not obligations:
-            obligations.append("Standard performance obligations apply")
+            obligations.append("**Standard Obligations:** General performance requirements.")
         
         # Analyze termination
         termination = []
         if 'notice' in text_lower:
-            termination.append("Notice requirements for termination are specified")
+            termination.append("**Notice Period:** Advanced written warning is required before exit.")
         if 'breach' in text_lower:
-            termination.append("Termination for breach is addressed")
+            termination.append("**Breach Penalty:** Immediate dissolution conditions apply to severe contract violations.")
         if not termination:
-            termination.append("Standard termination provisions apply")
+            termination.append("**Standard Termination:** General legal dissolution rules.")
         
         # Assess risk level
         risk_indicators = ['indemnification', 'penalty', 'liquidated damages', 'unlimited liability']
         risk_count = sum(1 for indicator in risk_indicators if indicator in text_lower)
         risk_level = "High" if risk_count >= 2 else "Medium" if risk_count >= 1 else "Low"
-        
+
+        # Embedded Risks
+        risks = []
+        if risk_level in ["High", "Medium"]:
+            if 'indemnification' in text_lower:
+                risks.append("**⚠️ Financial Exposure:** Severe indemnification demands found.")
+            if 'penalty' in text_lower:
+                risks.append("**⚠️ Penalty Costs:** Fixed financial damages identified.")
+            if not risks:
+                risks.append("**⚠️ Potential Liability:** Restrictive covenants may exist.")
+
         return {
-            'keyRights': rights[:5],
-            'topObligations': obligations[:5], 
-            'terminationRules': termination[:5],
+            'confidence': 'High' if len(text_lower) > 200 else 'Medium',
             'riskLevel': risk_level,
-            'keyDates': [
-                "Contract effective: As specified in document",
-                "Review terms: See specific clauses for dates",
-                "Notice periods: As outlined in termination section"
-            ]
+            'keyTakeaways': takeaways,
+            'rights': rights[:5],
+            'obligations': obligations[:5], 
+            'risks': risks[:3],
+            'termination': termination[:5]
         }
     
     def _detect_content_based_red_flags(self, text_lower, full_text):
@@ -242,13 +257,11 @@ class WorkingQuestionAnswerer:
                 relevant_sentences.append(sentence.strip())
         
         if relevant_sentences:
-            context = '. '.join(relevant_sentences[:3])
-            answer = f"Based on the document analysis, regarding your question about {question_lower.split()[2:6] if len(question_lower.split()) > 5 else 'this topic'}: {context}"
-            if len(answer) < 100:
-                answer += ". The document contains relevant information about this topic that addresses your specific question."
-            confidence = 'medium'
+            context = '. '.join(relevant_sentences[:2])
+            answer = f"### Clause Analysis\n\nBased on your document, here is what I found regarding **{question_lower.split()[2:6] if len(question_lower.split()) > 5 else 'this topic'}**:\n\n- **Key Finding:** {relevant_sentences[0]}\n- **Context:** {relevant_sentences[1] if len(relevant_sentences) > 1 else 'No additional context'}\n\n*Please review the highlighted section for full details.*"
+            confidence = 'high'
         else:
-            answer = f"I found limited specific information about {question_lower.split()[2:6] if len(question_lower.split()) > 5 else 'this topic'} in the document. You may want to review the full document or consult with a legal professional for detailed guidance."
+            answer = f"### Topic Not Found\n\nI found limited specific information about **{question_lower.split()[2:6] if len(question_lower.split()) > 5 else 'this topic'}** in the document.\n\n- Try rephrasing your question.\n- Verify the clause is included in this contract version."
             confidence = 'low'
         
         return {

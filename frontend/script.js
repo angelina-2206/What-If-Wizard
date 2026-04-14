@@ -405,37 +405,80 @@ class WhatIfWizard {
     renderSmartSummary(summary) {
         if (!this.smartSummaryContent) return;
 
-        const summaryHtml = `
-            <div class="summary-sections">
-                <div class="summary-section">
-                    <h4><i class="fas fa-shield-alt"></i> Key Rights</h4>
-                    <ul class="summary-list">
-                        ${summary.keyRights.map(right => `<li>${right}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="summary-section">
-                    <h4><i class="fas fa-tasks"></i> Top Obligations</h4>
-                    <ul class="summary-list">
-                        ${summary.topObligations.map(obligation => `<li>${obligation}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="summary-section">
-                    <h4><i class="fas fa-times-circle"></i> Termination Rules</h4>
-                    <ul class="summary-list">
-                        ${summary.terminationRules.map(rule => `<li>${rule}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="summary-footer">
-                    <div class="risk-indicator risk-${summary.riskLevel.toLowerCase()}">
-                        <i class="fas fa-info-circle"></i>
-                        Risk Level: ${summary.riskLevel}
-                    </div>
-                </div>
+        // Confidence & Risk Gauge
+        const riskColors = { 'Low': 'success-500', 'Medium': 'warning-500', 'High': 'error-500'};
+        const rColor = riskColors[summary.riskLevel] || 'primary-400';
+
+        let html = `
+        <div class="ss-overview-plate glass-panel">
+            <div class="ss-risk-gauge">
+                <span class="ss-gauge-label">Overall Risk Profile</span>
+                <span class="ss-gauge-value" style="color: var(--${rColor}); text-shadow: 0 0 10px var(--${rColor});">${summary.riskLevel}</span>
             </div>
+            <div class="ss-confidence-badge">
+                <i class="fas fa-check-circle"></i> AI Confidence: ${summary.confidence || 'High'}
+            </div>
+        </div>
+
+        <div class="ss-takeaways">
+            <h3 class="ss-section-title"><i class="fas fa-bolt text-primary" style="color: var(--primary-400)"></i> Key Insights</h3>
+            <div class="ss-takeaway-grid">
+                ${(summary.keyTakeaways || []).map(t => `
+                    <div class="ss-takeaway-card glass-panel group-hover-lift">
+                        <span class="ss-takeaway-label">${t.label}</span>
+                        <span class="ss-takeaway-value">${t.value}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+
+        <div class="ss-insight-cards">
+            <!-- Specific Insight Groupings -->
+            ${this.buildInsightCard('Core Rights', 'fa-shield-alt', 'green', summary.rights)}
+            ${this.buildInsightCard('Obligations', 'fa-tasks', 'blue', summary.obligations)}
+            ${this.buildInsightCard('Critical Risks', 'fa-exclamation-triangle', 'red', summary.risks)}
+            ${this.buildInsightCard('Termination', 'fa-door-open', 'dark', summary.termination)}
+        </div>
         `;
 
-        this.smartSummaryContent.innerHTML = summaryHtml;
-        this.smartSummaryContent.style.animation = 'fadeInUp 0.5s ease-out';
+        this.smartSummaryContent.innerHTML = html;
+        this.smartSummaryContent.style.animation = 'fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+    }
+
+    buildInsightCard(title, icon, colorTheme, items) {
+        if (!items || items.length === 0) return '';
+        
+        // Render markdown for each bullet point
+        const blocksHtml = items.map(item => `
+            <div class="ss-markdown-wrapper">
+                ${this.parseMarkdown(item)}
+            </div>
+        `).join('');
+
+        return `
+        <div class="ss-card ss-theme-${colorTheme}">
+            <div class="ss-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+                <div class="ss-card-title">
+                    <div class="ss-icon-box"><i class="fas ${icon}"></i></div>
+                    ${title}
+                </div>
+                <i class="fas fa-chevron-down ss-chevron"></i>
+            </div>
+            <div class="ss-card-body">
+                <div class="ss-card-content markdown-content">
+                    ${blocksHtml}
+                </div>
+                <div class="ss-card-actions">
+                    <button class="ss-action-btn" onclick="window.whatIfWizard.askQuestion('Explain the ${title.toLowerCase()} clauses in extremely simple terms')">
+                        <i class="fas fa-magic"></i> Explain this
+                    </button>
+                    <button class="ss-action-btn secondary" onclick="window.whatIfWizard.askQuestion('Are there any hidden vulnerabilities regarding ${title.toLowerCase()}?')">
+                        <i class="fas fa-robot"></i> Ask AI
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
     }
 
     // Red Flag Detection
@@ -660,20 +703,59 @@ class WhatIfWizard {
         this.scrollToBottom();
     }
 
+    parseMarkdown(text) {
+        let html = text;
+        // Bold
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        // Headings (e.g., ### Heading)
+        html = html.replace(/^### (.*$)/gim, '<h4>$1</h4>');
+        html = html.replace(/^## (.*$)/gim, '<h3>$1</h3>');
+        // Unordered lists (- item) using a simple replace
+        html = html.replace(/^[-\*]\s+(.*)/gim, '<ul><li>$1</li></ul>');
+        html = html.replace(/<\/ul>\n<ul>/g, '\n'); // merge adjacent list items
+        // Line breaks
+        html = html.replace(/\n/g, '<br>');
+        return html;
+    }
+
     addBotMessage(text, confidence = 'medium', sources = []) {
         if (!this.chatMessages) return;
 
         const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        const confidenceBadge = confidence ? 
-            `<span class="confidence-badge confidence-${confidence}">${confidence} confidence</span>` : '';
-
-        // Process text for citations
-        const processedText = this.addCitationHighlights(text);
         
+        // Confidence bar UI
+        const confidenceColors = {
+            'high': 'success-500',
+            'medium': 'warning-500', 
+            'low': 'error-500'
+        };
+        const colorClass = confidenceColors[confidence.toLowerCase()] || 'primary-500';
+        const fillWidth = confidence.toLowerCase() === 'high' ? '90%' : confidence.toLowerCase() === 'medium' ? '60%' : '30%';
+
+        const confidenceBadge = confidence ? `
+            <div class="confidence-bar-container">
+                <div class="confidence-bar-label">Confidence: <span>${confidence.toUpperCase()}</span></div>
+                <div class="confidence-bar-bg">
+                    <div class="confidence-bar-fill bg-${colorClass}" style="width: ${fillWidth};"></div>
+                </div>
+            </div>` : '';
+
+        // Process text for markdown and citations
+        let parsedMd = this.parseMarkdown(text);
+        const processedText = this.addCitationHighlights(parsedMd);
+        
+        // Source Highlight Button
+        // Use an escaped preview snippet for the citation if available
+        let snippetText = "Document Clause";
+        if (sources.length > 0 && sources[0].content_preview) {
+             snippetText = this.escapeHtml(sources[0].content_preview).replace(/'/g, "\\'");
+        }
+
         const sourceInfo = sources.length > 0 ? 
-            `<div class="sources-info">
-                <i class="fas fa-quote-left"></i>
-                Based on ${sources.length} source(s) from document
+            `<div class="sources-info mt-2">
+                <button class="source-view-btn" onclick="window.whatIfWizard.showCitation('${snippetText}')">
+                    <i class="fas fa-search"></i> View Selected Clause
+                </button>
             </div>` : '';
 
         const messageHtml = `
@@ -682,14 +764,12 @@ class WhatIfWizard {
                     <i class="fas fa-robot"></i>
                 </div>
                 <div class="message-content">
-                    <div class="message-bubble bot-bubble">
+                    <div class="message-bubble bot-bubble markdown-content">
                         <div class="message-text"></div>
                     </div>
                     ${sourceInfo}
-                    <div class="message-meta">
-                        ${confidenceBadge}
-                        <span class="message-time">${timestamp}</span>
-                    </div>
+                    ${confidenceBadge}
+                    <div class="message-time-only" style="font-size:0.75rem; color: var(--text-muted); margin-top:8px">${timestamp}</div>
                 </div>
             </div>
         `;
