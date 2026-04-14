@@ -300,10 +300,13 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    padding: var(--space-xl);
+    padding: var(--space-md) var(--space-xl);
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* Upload Section Premium */
@@ -524,10 +527,11 @@ body {
 -------------------------------------- */
 .analysis-section {
     animation: fadeIn 0.5s ease-out;
-    padding: var(--space-xl) 2%;
-    height: calc(100vh - 150px); /* Fill remaining viewport, accounting for header and footer */
+    padding: var(--space-md) 2%;
+    height: calc(100vh - 160px); /* Tighter height to leave room for footer */
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 /* Horizontal Document Header */
@@ -615,9 +619,10 @@ body {
 .workspace-sidebar {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
+    gap: var(--space-2xl); /* More space between groups to reduce clutter */
     overflow-y: auto;
-    padding-right: var(--space-sm);
+    padding-right: var(--space-md);
+    padding-bottom: var(--space-xl);
 }
 
 .workspace-sidebar::-webkit-scrollbar {
@@ -641,16 +646,24 @@ body {
 }
 
 .sidebar-title {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+    letter-spacing: 0.1em; /* More letter spacing for legibility */
+    color: var(--primary-300); /* Primary color for headers to make them stand out */
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: var(--space-xs); /* Separation from content */
 }
 
+.ai-suggested-subtext {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    opacity: 0.8;
+}
 .badge-count {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-secondary);
@@ -1434,17 +1447,23 @@ body {
     100% { transform: translateX(0) scale(1); opacity: 1; }
 }
 
-/* Global Footer */
+/* Global Footer - Separate & Premium */
 .app-footer {
     text-align: center;
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-md) var(--space-md);
     color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: auto;
-    width: 100%;
-    z-index: 10;
-    position: relative;
+    font-size: 0.75rem;
+    background: rgba(11, 15, 42, 0.8);
+    backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+    z-index: 100;
+    margin-top: auto;
+    letter-spacing: 0.03em;
+}
+
+.app-footer p {
+    opacity: 0.7;
 }
 
 /* Markdown Styles */
