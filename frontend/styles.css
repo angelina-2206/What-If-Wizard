@@ -197,10 +197,10 @@ body {
 
 /* Header */
 .header {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(11, 15, 42, 0.7); /* Deep dark background */
     backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -208,9 +208,10 @@ body {
 }
 
 .header-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: var(--space-lg);
+    width: 100%;
+    max-width: 100%; /* Go edge to edge as per user request */
+    margin: 0;
+    padding: var(--space-md) 5%; /* 5% side padding for premium breathability */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -252,13 +253,14 @@ body {
 }
 
 .logo-text h1 {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+    background: linear-gradient(135deg, var(--primary-300), var(--primary-500));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0;
+    letter-spacing: -0.02em;
 }
 
 .logo-text p {
