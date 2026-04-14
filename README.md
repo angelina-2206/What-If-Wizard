@@ -54,7 +54,7 @@ python run.py
 ```
 what-if-wizard/
 ├── frontend/
-│   ├── index.html          # Main UI with modern design
+│   ├── index.html          # Main UI
 │   ├── styles.css          # Professional styling
 │   └── script.js           # Enhanced frontend logic
 ├── backend/

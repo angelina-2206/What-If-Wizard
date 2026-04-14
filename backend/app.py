@@ -3,12 +3,20 @@ What If Wizard - Working Version with Fallbacks
 Handles ByteZ API issues gracefully with intelligent fallbacks
 """
 
+import sys
 import os
 import tempfile
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+
+# Fix emoji printing on Windows
+if sys.stdout.encoding.lower() != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        pass
 
 from document_processor import HybridDocumentProcessor
 
@@ -473,4 +481,9 @@ if __name__ == '__main__':
     print("📊 Local embeddings for fast document search")
     print("🧠 Smart content analysis for summaries and red flags")
     
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    try:
+        app.run(debug=False, host='127.0.0.1', port=5000)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

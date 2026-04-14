@@ -48,49 +48,119 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Upload Section -->
-            <section id="upload-section" class="upload-section">
-                <div class="upload-hero">
-                    <div class="hero-content">
-                        <h2 class="hero-title">Analyze Your Legal Documents</h2>
-                        <p class="hero-subtitle">Upload your contract, agreement, or legal document and get instant AI-powered insights</p>
+            <!-- Landing Section -->
+            <section id="landing-section" class="landing-section">
+                <!-- Decorative background elements -->
+                <div class="glow-orb orb-primary"></div>
+                <div class="glow-orb orb-secondary"></div>
+                
+                <div class="landing-content">
+                    <div class="badge-container">
+                        <div class="badge pulse-badge">
+                            <span class="live-dot"></span>
+                            ✨ Next Generation AI
+                        </div>
                     </div>
                     
-                    <div class="upload-widget">
+                    <h1 class="landing-title">
+                        Uncover the <span class="gradient-text shimmer">Truth</span><br>
+                        in Your <span class="gradient-text shimmer">Contracts</span>
+                    </h1>
+                    
+                    <p class="landing-subtitle">
+                        The cinematic, AI-powered legal document analyzer. Detect red flags, summarize complex rights, and extract insights with laser precision.
+                    </p>
+                    
+                    <div class="landing-cta-container">
+                        <button id="get-started-btn" class="landing-cta">
+                            <span>Analyze Document</span>
+                            <i class="fas fa-arrow-right"></i>
+                            <div class="cta-glow"></div>
+                        </button>
+                        
+                        <div class="trust-element">
+                            <div class="trust-line"></div>
+                            <div class="trust-content">
+                                <i class="fas fa-shield-alt trust-icon"></i>
+                                <span class="trust-text">Enterprise-grade Security &bull; 100% Local Processing</span>
+                            </div>
+                            <div class="trusted-by">Trusted by 10,000+ legal professionals</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="landing-visual">
+                    <!-- Premium Glass AI Panel Mockup -->
+                    <div class="mock-ai-panel parallax-card primary-card">
+                        <div class="panel-header-mock">
+                            <div class="mock-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="mock-title">Analysis Interface</div>
+                        </div>
+                        <div class="panel-body-mock">
+                            <div class="mock-clause">
+                                <span class="mock-highlight">8.3 Termination for Convenience.</span> Either party may terminate this agreement upon 30 days written notice...
+                            </div>
+                            <div class="mock-insight glass-insight">
+                                <div class="insight-header">
+                                    <i class="fas fa-magic"></i> AI Insight
+                                </div>
+                                <p>This clause exposes you to short-notice cancellation. Standard industry practice is 90 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Parallax Elements -->
+                    <div class="parallax-card floating-stat risk-card">
+                        <div class="stat-icon warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Risk Level</div>
+                            <div class="stat-value">High</div>
+                        </div>
+                        <div class="stat-bar"><div class="bar-fill warning-fill"></div></div>
+                    </div>
+                    
+                    <div class="parallax-card floating-stat summary-card">
+                        <div class="stat-icon success-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Clauses Checked</div>
+                            <div class="stat-value">142/142</div>
+                        </div>
+                        <div class="stat-bar"><div class="bar-fill success-fill"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section id="upload-section" class="upload-section" style="display: none;">
+                <div class="upload-hero">
+                    <div class="hero-content">
+                        <h2 class="hero-title">Analyze Document</h2>
+                        <p class="hero-subtitle">Upload your legal agreement to extract insights.</p>
+                    </div>
+                    
+                    <div class="upload-widget glass-dropzone">
                         <div id="drop-zone" class="drop-zone">
                             <div class="drop-zone-content">
                                 <div class="upload-animation">
-                                    <div class="upload-icon">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                    </div>
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                     <div class="upload-pulse"></div>
                                 </div>
-                                <h3>Drop your PDF here</h3>
-                                <p>or click to browse files</p>
+                                <h3>Drag & drop your contract or click to upload</h3>
+                                <p class="privacy-microcopy"><i class="fas fa-lock"></i> No data stored. Fully private.</p>
                                 <input type="file" id="file-input" accept=".pdf" hidden>
                                 <button type="button" id="browse-btn" class="browse-btn">
-                                    <i class="fas fa-folder-open"></i>
-                                    Choose File
+                                    <i class="fas fa-cloud-upload-alt"></i> Select File
                                 </button>
-                                <div class="file-requirements">
-                                    <small><i class="fas fa-info-circle"></i> PDF files up to 16MB</small>
-                                </div>
                             </div>
-                            <div id="upload-progress" class="upload-progress" style="display: none;">
-                                <div class="progress-animation">
-                                    <div class="progress-circle">
-                                        <svg viewBox="0 0 100 100">
-                                            <circle cx="50" cy="50" r="45" class="progress-bg"></circle>
-                                            <circle cx="50" cy="50" r="45" class="progress-bar" id="progress-circle"></circle>
-                                        </svg>
-                                        <div class="progress-text">
-                                            <i class="fas fa-cogs fa-spin"></i>
-                                        </div>
-                                    </div>
+                            <div id="upload-progress" class="upload-progress premium-progress" style="display: none;">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill"></div>
                                 </div>
                                 <div class="upload-status-text">
-                                    <h4 id="upload-status">Processing your document...</h4>
-                                    <p id="upload-substatus">This may take a few moments</p>
+                                    <h4 id="upload-status">Analyzing document...</h4>
+                                    <p id="upload-substatus">Extracting clauses and identifying risks</p>
                                 </div>
                             </div>
                         </div>
@@ -100,154 +170,128 @@
 
             <!-- Analysis Dashboard -->
             <section id="analysis-section" class="analysis-section" style="display: none;">
-                <div class="analysis-container">
-                    <!-- Document Header -->
-                    <div class="document-header">
-                        <div class="doc-info">
-                            <div class="doc-icon-large">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="doc-meta">
-                                <h2 id="doc-name" class="doc-title">Document Analysis</h2>
-                                <p class="doc-subtitle">Ready for your questions</p>
-                                <div class="doc-stats">
-                                    <span class="stat-item">
-                                        <i class="fas fa-clock"></i>
-                                        <span id="processing-time">Processed in 0s</span>
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="fas fa-file-alt"></i>
-                                        <span id="chunk-count">0 sections analyzed</span>
-                                    </span>
+                
+                <!-- Sleek Horizontal Document Header -->
+                <div class="document-top-bar">
+                    <div class="doc-info-left">
+                        <i class="fas fa-file-pdf doc-icon-mini"></i>
+                        <span id="doc-name" class="doc-title-mini">Document Name</span>
+                        <div class="status-pill"><span class="green-dot"></span> Analyzed ✓</div>
+                    </div>
+                    <div class="doc-actions-right">
+                        <button class="action-link"><i class="fas fa-eye"></i> View</button>
+                        <button class="action-link" id="reset-btn"><i class="fas fa-upload"></i> Re-upload</button>
+                    </div>
+                </div>
+
+                <div class="analysis-workspace">
+                    
+                    <!-- LEFT PANEL (25% - 30%) -->
+                    <div class="workspace-sidebar">
+                        
+                        <!-- Smart Summary (Structured Cards) -->
+                        <div class="sidebar-section">
+                            <h3 class="sidebar-title"><i class="fas fa-bolt"></i> Smart Summary</h3>
+                            <div id="smart-summary-content" class="structured-cards">
+                                <!-- Populated dynamically or static loaders -->
+                                <div class="structured-card card-rights">
+                                    <div class="card-header"><i class="fas fa-gavel"></i> Rights</div>
+                                    <div class="card-body">Extracting key rights...</div>
+                                </div>
+                                <div class="structured-card card-obligations">
+                                    <div class="card-header"><i class="fas fa-handshake"></i> Obligations</div>
+                                    <div class="card-body">Identifying obligations...</div>
+                                </div>
+                                <div class="structured-card card-risks">
+                                    <div class="card-header"><i class="fas fa-exclamation-triangle"></i> Risks</div>
+                                    <div class="card-body">Checking for risks...</div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Red Flags -->
+                        <div class="sidebar-section">
+                            <div class="sidebar-title-row">
+                                <h3 class="sidebar-title"><i class="fas fa-flag"></i> Red Flags</h3>
+                                <span class="badge-count" id="red-flag-count">0</span>
+                            </div>
+                            <div id="red-flags-content">
+                                <div class="all-clear-state">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h4>All Clear ✓</h4>
+                                    <p>No major risks detected</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Suggested Questions (Pills) -->
+                        <div class="sidebar-section">
+                            <div class="sidebar-title-row">
+                                <h3 class="sidebar-title"><i class="fas fa-sparkles"></i> AI Suggested</h3>
+                                <button class="action-icon" id="generate-questions"><i class="fas fa-refresh"></i></button>
+                            </div>
+                            <div class="ai-suggested-subtext">AI Suggested based on your document</div>
+                            
+                            <div id="questions-content" class="suggestion-chip-categories">
+                                <!-- Rights (Blue) -->
+                                <div class="chip-category">
+                                    <h4 class="chip-cat-title text-blue">RIGHTS</h4>
+                                    <div class="chip-group" id="rights-questions"></div>
+                                </div>
+                                
+                                <!-- Termination (Red) -->
+                                <div class="chip-category">
+                                    <h4 class="chip-cat-title text-red">TERMINATION</h4>
+                                    <div class="chip-group" id="termination-questions"></div>
+                                </div>
+                                
+                                <!-- Financial (Green) -->
+                                <div class="chip-category">
+                                    <h4 class="chip-cat-title text-green">FINANCIAL</h4>
+                                    <div class="chip-group" id="financial-questions"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="analysis-grid">
-                        <!-- Smart Summary Panel -->
-                        <div class="panel smart-summary-panel">
-                            <div class="panel-header">
-                                <div class="panel-icon">
-                                    <i class="fas fa-lightbulb"></i>
-                                </div>
-                                <h3>Smart Summary</h3>
-                                <div class="panel-actions">
-                                    <button class="action-btn" id="refresh-summary">
-                                        <i class="fas fa-refresh"></i>
-                                    </button>
-                                    <button class="action-btn" id="expand-summary">
-                                        <i class="fas fa-expand"></i>
-                                    </button>
+                    <!-- RIGHT PANEL (70%) - AI ASSISTANT -->
+                    <div class="workspace-main">
+                        <div class="premium-chat-panel">
+                            <div class="chat-header">
+                                <div class="chat-title">AI Assistant</div>
+                                <div class="risk-score-container">
+                                    <span>Risk Score</span>
+                                    <div class="risk-gauge"><div class="gauge-fill" style="width: 15%;"></div></div>
+                                    <span class="score-val">Low</span>
                                 </div>
                             </div>
-                            <div class="panel-content" id="smart-summary-content">
-                                <div class="summary-loading">
-                                    <div class="loading-spinner small"></div>
-                                    <p>Generating smart summary...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Red Flag Alerts -->
-                        <div class="panel red-flags-panel">
-                            <div class="panel-header">
-                                <div class="panel-icon warning">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <h3>Red Flag Alerts</h3>
-                                <span class="alert-count" id="red-flag-count">0</span>
-                            </div>
-                            <div class="panel-content" id="red-flags-content">
-                                <div class="no-alerts">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <p>No critical issues detected</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sample Questions Panel -->
-                        <div class="panel questions-panel">
-                            <div class="panel-header">
-                                <div class="panel-icon">
-                                    <i class="fas fa-question-circle"></i>
-                                </div>
-                                <h3>Suggested Questions</h3>
-                                <button class="action-btn" id="generate-questions">
-                                    <i class="fas fa-wand-magic-sparkles"></i>
-                                </button>
-                            </div>
-                            <div class="panel-content" id="questions-content">
-                                <div class="question-categories">
-                                    <div class="question-category">
-                                        <h4><i class="fas fa-gavel"></i> Rights & Obligations</h4>
-                                        <div class="question-list" id="rights-questions"></div>
-                                    </div>
-                                    <div class="question-category">
-                                        <h4><i class="fas fa-times-circle"></i> Termination & Breach</h4>
-                                        <div class="question-list" id="termination-questions"></div>
-                                    </div>
-                                    <div class="question-category">
-                                        <h4><i class="fas fa-dollar-sign"></i> Financial Terms</h4>
-                                        <div class="question-list" id="financial-questions"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Chat Interface -->
-                        <div class="panel chat-panel">
-                            <div class="panel-header">
-                                <div class="panel-icon">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <h3>AI Assistant</h3>
-                                <div class="chat-status">
-                                    <div class="status-indicator online"></div>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            <div class="panel-content chat-content">
-                                <div id="chat-messages" class="chat-messages">
-                                    <div class="welcome-message">
-                                        <div class="message bot-message">
-                                            <div class="message-avatar">
-                                                <i class="fas fa-robot"></i>
-                                            </div>
-                                            <div class="message-content">
-                                                <div class="message-text">
-                                                    Welcome! I've analyzed your document and I'm ready to help. Ask me anything about the terms, conditions, or implications.
-                                                </div>
-                                                <div class="message-time">
-                                                    Just now
-                                                </div>
-                                            </div>
+                            
+                            <div id="chat-messages" class="chat-box">
+                                <div class="message bot-message">
+                                    <div class="message-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                                    <div class="message-bubble bot-bubble">
+                                        <p>I've analyzed your document. Here are some quick actions you can take:</p>
+                                        <div class="quick-actions">
+                                            <button class="qa-btn">Summarize</button>
+                                            <button class="qa-btn">Simplify Terms</button>
+                                            <button class="qa-btn">Find Risks</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="chat-input-container">
-                                    <form id="question-form" class="question-form">
-                                        <div class="input-wrapper">
-                                            <input 
-                                                type="text" 
-                                                id="question-input" 
-                                                placeholder="Ask anything about your document..." 
-                                                autocomplete="off"
-                                            >
-                                            <button type="button" class="attachment-btn" id="voice-btn">
-                                                <i class="fas fa-microphone"></i>
-                                            </button>
-                                            <button type="submit" id="send-btn" class="send-btn">
-                                                <i class="fas fa-paper-plane"></i>
-                                            </button>
-                                        </div>
-                                        <div class="input-suggestions" id="input-suggestions"></div>
-                                    </form>
-                                </div>
+                            </div>
+
+                            <div class="chat-input-area">
+                                <form id="question-form" class="premium-input-form">
+                                    <button type="button" class="mic-btn" id="voice-btn"><i class="fas fa-microphone"></i></button>
+                                    <input type="text" id="question-input" placeholder="Ask anything about your document..." autocomplete="off">
+                                    <button type="submit" id="send-btn" class="send-prompt-btn"><i class="fas fa-paper-plane"></i></button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </section>
         </main>
 

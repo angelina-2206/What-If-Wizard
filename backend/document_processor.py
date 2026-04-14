@@ -9,11 +9,11 @@ import PyPDF2
 from typing import List, Dict, Any
 import chromadb
 from chromadb.config import Settings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -50,47 +50,7 @@ class HybridDocumentProcessor:
     
     def _initialize_embeddings(self):
         """Initialize embeddings with fallback options."""
-        # Option 1: Try OpenAI embeddings if key is valid
-        openai_key = os.getenv('OPENAI_API_KEY')
-        if openai_key and not openai_key.startswith('sk-abcdef') and len(openai_key) > 20:
-            try:
-                print("🔄 Trying OpenAI embeddings...")
-                embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
-                # Test with a simple embedding
-                test_embedding = embeddings.embed_query("test")
-                if len(test_embedding) > 0:
-                    print("✅ OpenAI embeddings initialized successfully")
-                    return embeddings
-            except Exception as e:
-                print(f"⚠️ OpenAI embeddings failed: {str(e)}")
-        
-        # Option 2: Try ByteZ API for embeddings (if they support it)
-        bytez_key = os.getenv('BYTEZ_API_KEY')
-        if bytez_key:
-            try:
-                print("🔄 Trying ByteZ API for embeddings...")
-                embeddings = OpenAIEmbeddings(
-                    model="text-embedding-ada-002",
-                    openai_api_base="https://api.bytez.com/v1",
-                    openai_api_key=bytez_key
-                )
-                # Test with a simple embedding
-                test_embedding = embeddings.embed_query("test")
-                if len(test_embedding) > 0:
-                    print("✅ ByteZ embeddings initialized successfully")
-                    return embeddings
-            except Exception as e:
-                print(f"⚠️ ByteZ embeddings failed: {str(e)}")
-        
-        # Option 3: Fallback to local sentence-transformers
-        try:
-            print("🔄 Falling back to local SentenceTransformer...")
-            return LocalEmbeddings()
-        except Exception as e:
-            print(f"⚠️ Local embeddings failed: {str(e)}")
-        
-        # Option 4: Final fallback to simple embeddings
-        print("⚠️ Using simple hash-based embeddings as final fallback")
+        print("⚠️ Forcing simple hash-based embeddings due to environment constraints")
         return SimpleEmbeddings()
     
     def extract_text_from_pdf(self, file_path: str) -> str:
@@ -257,6 +217,7 @@ class LocalEmbeddings:
     
     def __init__(self):
         try:
+            from sentence_transformers import SentenceTransformer
             # Use a lightweight model for embeddings
             self.model = SentenceTransformer('all-MiniLM-L6-v2')
             print("✅ Local SentenceTransformer model loaded")

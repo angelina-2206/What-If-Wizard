@@ -16,7 +16,7 @@ class WhatIfWizard {
         
         this.initializeElements();
         this.bindEvents();
-        this.showUploadSection();
+        this.showLandingSection();
         this.initializeAnimations();
         this.checkApiHealth();
     }
@@ -32,8 +32,11 @@ class WhatIfWizard {
         this.progressCircle = document.getElementById('progress-circle');
 
         // Section elements
+        this.landingSection = document.getElementById('landing-section');
         this.uploadSection = document.getElementById('upload-section');
         this.analysisSection = document.getElementById('analysis-section');
+        this.getStartedBtn = document.getElementById('get-started-btn');
+        this.header = document.querySelector('.header');
 
         // Document header elements
         this.docName = document.getElementById('doc-name');
@@ -81,6 +84,16 @@ class WhatIfWizard {
     }
 
     bindEvents() {
+        // Landing page events
+        if (this.getStartedBtn) {
+            this.getStartedBtn.addEventListener('click', () => {
+                this.showUploadSection();
+                setTimeout(() => {
+                    this.uploadSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            });
+        }
+
         // File upload events
         if (this.dropZone) {
             this.dropZone.addEventListener('click', () => this.fileInput?.click());
@@ -303,13 +316,25 @@ class WhatIfWizard {
         if (this.progressCircle) this.progressCircle.style.strokeDashoffset = '283';
     }
 
+    showLandingSection() {
+        if (this.header) this.header.style.display = 'none';
+        if (this.landingSection) this.landingSection.style.display = 'flex';
+        if (this.uploadSection) this.uploadSection.style.display = 'none';
+        if (this.analysisSection) this.analysisSection.style.display = 'none';
+        if (this.resetBtn) this.resetBtn.style.display = 'none';
+    }
+
     showUploadSection() {
-        if (this.uploadSection) this.uploadSection.style.display = 'block';
+        if (this.header) this.header.style.display = 'flex';
+        if (this.landingSection) this.landingSection.style.display = 'none';
+        if (this.uploadSection) this.uploadSection.style.display = 'flex';
         if (this.analysisSection) this.analysisSection.style.display = 'none';
         if (this.resetBtn) this.resetBtn.style.display = 'none';
     }
 
     showAnalysisSection(processingTime = 0) {
+        if (this.header) this.header.style.display = 'flex';
+        if (this.landingSection) this.landingSection.style.display = 'none';
         if (this.uploadSection) this.uploadSection.style.display = 'none';
         if (this.analysisSection) this.analysisSection.style.display = 'block';
         if (this.resetBtn) this.resetBtn.style.display = 'flex';
@@ -537,19 +562,19 @@ class WhatIfWizard {
     renderSuggestedQuestions(questions) {
         if (this.rightsQuestions) {
             this.rightsQuestions.innerHTML = questions.rights.map(q => 
-                `<button class="question-item" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
+                `<button class="suggestion-chip chip-blue" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
             ).join('');
         }
 
         if (this.terminationQuestions) {
             this.terminationQuestions.innerHTML = questions.termination.map(q => 
-                `<button class="question-item" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
+                `<button class="suggestion-chip chip-red" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
             ).join('');
         }
 
         if (this.financialQuestions) {
             this.financialQuestions.innerHTML = questions.financial.map(q => 
-                `<button class="question-item" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
+                `<button class="suggestion-chip chip-green" onclick="window.whatIfWizard.askQuestion('${q}')">${q}</button>`
             ).join('');
         }
     }
@@ -653,11 +678,13 @@ class WhatIfWizard {
 
         const messageHtml = `
             <div class="message bot-message">
-                <div class="message-avatar">
+                <div class="message-avatar bot-avatar">
                     <i class="fas fa-robot"></i>
                 </div>
                 <div class="message-content">
-                    <div class="message-text">${processedText}</div>
+                    <div class="message-bubble bot-bubble">
+                        <div class="message-text"></div>
+                    </div>
                     ${sourceInfo}
                     <div class="message-meta">
                         ${confidenceBadge}
@@ -669,6 +696,12 @@ class WhatIfWizard {
         
         this.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
         this.scrollToBottom();
+
+        // Get the newly created text container and type into it
+        const newMessages = this.chatMessages.querySelectorAll('.message-text');
+        const latestTextContainer = newMessages[newMessages.length - 1];
+        
+        this.typeHtmlText(latestTextContainer, processedText);
     }
 
     addCitationHighlights(text) {
@@ -679,11 +712,50 @@ class WhatIfWizard {
         );
     }
 
+    async typeHtmlText(element, htmlContent) {
+        // Inject html, extract text nodes, clear them, then type them back to preserve HTML spans
+        element.innerHTML = htmlContent + '<span class="typing-cursor"></span>';
+        
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+        const textNodes = [];
+        let node;
+        while(node = walker.nextNode()) {
+            // Ignore the cursor elements empty texts or whitespace only spaces if we want, but better to keep all
+            textNodes.push(node);
+        }
+        
+        const originalTexts = textNodes.map(n => n.nodeValue);
+        textNodes.forEach(n => n.nodeValue = '');
+        
+        element.style.opacity = '1';
+        
+        const scrollInt = setInterval(() => this.scrollToBottom(), 100);
+
+        // Type out text
+        for (let i = 0; i < textNodes.length; i++) {
+            const tNode = textNodes[i];
+            const text = originalTexts[i];
+            for (let j = 0; j < text.length; j++) {
+                tNode.nodeValue += text[j];
+                // Tiny delay per character for fast reading effect
+                await new Promise(r => setTimeout(r, 8)); 
+            }
+        }
+
+        clearInterval(scrollInt);
+        
+        // Remove typing cursor
+        const cursor = element.querySelector('.typing-cursor');
+        if (cursor) cursor.remove();
+        
+        this.scrollToBottom();
+    }
+
     scrollToBottom() {
         if (this.chatMessages) {
             setTimeout(() => {
                 this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-            }, 100);
+            }, 50);
         }
     }
 

@@ -10,6 +10,13 @@ import webbrowser
 import time
 from pathlib import Path
 
+# Fix emoji printing on Windows
+if sys.stdout.encoding.lower() != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        pass
+
 def main():
     """Run the What If Wizard application."""
     print("🧙‍♂️ Starting What If Wizard...")
@@ -41,7 +48,8 @@ def main():
     
     # Change to backend directory and run the app
     os.chdir("backend")
-    os.system("python app.py")
+    import subprocess
+    subprocess.call([sys.executable, "app.py"])
 
 if __name__ == "__main__":
     main()
