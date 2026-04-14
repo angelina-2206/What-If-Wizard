@@ -1,159 +1,98 @@
-# What If Wizard 🧙‍♂️
+<div align="center">
+  <h1>🧙‍♂️ What If Wizard</h1>
+  <p><strong>The Intelligence-Driven Legal Workspace</strong></p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
+  <img alt="LangChain" src="https://img.shields.io/badge/LangChain-121212?style=for-the-badge" />
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+</div>
 
-*AI-Powered Legal Document Assistant*
+<br/>
 
-## Overview
+## 📖 Overview
 
-What If Wizard is an intelligent legal document analysis tool that helps you understand contracts, agreements, and other legal documents through natural language questions. Upload your PDF documents and get instant insights about your rights, obligations, and potential risks.
+**What If Wizard** is a premium, AI-native legal document analysis tool. It transforms static contracts, terms of service, and agreements into fully interactive workspaces. With a focus on consumer and enterprise privacy, the platform automatically parses complex legal jargon and highlights hidden risks, obligations, and financial exposures.
 
-## ✨ Features
+Through an intuitive, glassmorphic UI, users can engage in high-speed, structural Q&A to uncover exactly what their contracts dictate—without the need for an expensive legal retainer.
 
-- **Smart Document Analysis**: AI-powered extraction of key rights, obligations, and terms
-- **Red Flag Detection**: Automatically identifies potentially problematic clauses
-- **Interactive Q&A**: Ask questions about your documents in plain English
-- **Smart Summaries**: Get instant overviews of complex legal documents
-- **Contextual Questions**: AI-generated relevant questions based on your document
-- **Modern UI**: Professional interface with smooth animations
-- **Cost-Effective**: Uses local embeddings to minimize API costs
+---
 
-## 🚀 Quick Start
+## ⚡ Tech Stack
 
-### Option 1: Simple Run (Recommended)
+| Domain | Technologies |
+| :--- | :--- |
+| **Frontend Architecture** | Vanilla HTML5, Modern CSS3 (Glassmorphism), Vanilla JavaScript (ES6+), FontAwesome Icons |
+| **Backend Framework** | Python 3, Flask, Werkzeug |
+| **AI & NLP Processing** | LangChain, ByteZ API (LLaMA-3 70B), Local SentenceTransformers |
+| **Vector Database** | ChromaDB (Local, Privacy-First storage) |
+
+---
+
+## ✨ Premium Features
+
+*   **Asymmetric 60/40 Workspace:** A high-end split layout featuring an intelligent dropzone and a dynamic conversational AI side-panel.
+*   **Intelligent Smart Summaries:** Scrapes complex PDF text into categorised, collapsible Markdown-rendered blocks (Rights, Obligations, Risks) with embedded Risk Gauges.
+*   **Conversational UX & Typewriter AI:** AI responses are streamed naturally via a custom DOM TreeWalker mechanic, supporting live Markdown, Confidence Badges, and Source Highlight bindings.
+*   **Color-Coded NLP Chips:** Quick-action suggested questions are dynamically scraped from the contract and presented as color-coded, interactive tags.
+*   **Zero-Retention Privacy:** Uses local Python chunking and temporary system routing. The document never persists remotely.
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Simple Run (Recommended)
+You can launch the backend automatically using the bootstrap script:
 ```bash
 python run.py
 ```
 
-### Option 2: Manual Setup
-1. **Activate virtual environment**:
-   ```bash
-   # Windows
-   venv\Scripts\activate
-   
-   # Linux/Mac
-   source venv/bin/activate
-   ```
+### 2. Manual Setup Sequence
 
-2. **Start the backend**:
-   ```bash
-   cd backend
-   python app.py
-   ```
+**Enter your Virtual Environment:**
+```bash
+# Windows
+venv\Scripts\activate
 
-3. **Open the frontend**:
-   - Open `frontend/index.html` in your web browser
-   - The backend will be running on http://127.0.0.1:5000
-
-4. **Upload and analyze**:
-   - Drag & drop a PDF document
-   - Wait for processing to complete
-   - Explore smart summaries and red flags
-   - Ask questions about your document
-
-## 🏗️ Project Structure (Cleaned)
-
-```
-what-if-wizard/
-├── frontend/
-│   ├── index.html          # Main UI
-│   ├── styles.css          # Professional styling
-│   └── script.js           # Enhanced frontend logic
-├── backend/
-│   ├── app.py              # Main Flask application
-│   ├── document_processor.py # PDF processing & embeddings
-│   └── requirements.txt    # Python dependencies
-├── uploads/                # Temporary file storage (auto-created)
-├── .env                    # API keys and configuration
-├── run.py                  # Simple startup script
-└── README.md
+# Linux/Mac
+source venv/bin/activate
 ```
 
-## 🔧 Configuration
+**Initialize the Backend API:**
+```bash
+cd backend
+python app.py
+```
 
-### API Keys Setup
-The application supports multiple AI providers:
-
-1. **ByteZ API** (Recommended for cost-effectiveness):
-   ```env
-   BYTEZ_API_KEY=your-bytez-api-key
-   ```
-
-2. **OpenAI API** (Premium option):
-   ```env
-   OPENAI_API_KEY=your-openai-api-key
-   ```
-
-### Hybrid Architecture
-- **Language Model**: ByteZ Llama-3-70B or OpenAI GPT
-- **Embeddings**: Local SentenceTransformer (free, private, fast)
-- **Vector Database**: ChromaDB (local storage)
-- **No per-query embedding costs!**
-
-## 💡 Key Advantages
-
-1. **Cost-Effective**: Local embeddings eliminate per-query costs
-2. **Privacy-First**: Document embeddings stay on your machine
-3. **Reliable**: Multiple fallback options ensure it always works
-4. **Fast**: Local embeddings are faster than API calls
-5. **Professional**: Modern UI with smooth animations and responsive design
-
-## 🔒 Security & Privacy
-
-- Documents processed locally and deleted after analysis
-- Embeddings computed and stored locally
-- Only question/answer text sent to AI APIs
-- No document content stored on external servers
-
-## 🛠️ Advanced Usage
-
-### Smart Summary Features
-- Key rights extraction
-- Obligation identification
-- Risk level assessment
-- Termination conditions
-- Important dates
-
-### Red Flag Detection
-- Broad indemnification clauses
-- Automatic renewal terms
-- Unlimited liability exposure
-- Restrictive covenants
-- Unusual penalty clauses
-
-### Interactive Features
-- Context-aware question suggestions
-- Visual citations with source highlighting
-- Confidence indicators for AI responses
-- Toast notifications for user feedback
-
-## 📋 Requirements
-
-- Python 3.8+
-- Modern web browser
-- 2GB RAM (for local embeddings)
-- Internet connection (for AI API calls)
-
-## 🚨 Troubleshooting
-
-### Common Solutions
-1. **API Errors**: Check your API keys in `.env` file
-2. **Slow Processing**: First-time download of embedding model (~500MB)
-3. **CORS Issues**: Ensure backend is running on port 5000
-4. **PDF Issues**: Ensure PDFs contain extractable text
-
-### Get Help
-- Check the browser console for error messages
-- Verify all dependencies are installed
-- Ensure virtual environment is activated
-
-## 🎯 Example Questions
-
-- "What are my main obligations under this contract?"
-- "How can I terminate this agreement?"
-- "What red flags should I be concerned about?"
-- "What are the payment terms and deadlines?"
-- "What happens if I breach this contract?"
-- "Are there any automatic renewal clauses?"
+**Launch the Client:**
+Simply open `frontend/index.html` in your favorite web browser (Chrome or Edge recommended).
 
 ---
 
-*What If Wizard - Making legal documents accessible through AI* 🧙‍♂️⚖️
+## ⚙️ Configuration
+
+Ensure you create a `.env` file in your root tracking directory containing your language-model provider's key. 
+
+```env
+# Primary LLM via ByteZ
+BYTEZ_API_KEY=your-bytez-api-key
+
+# Fallback LLM via OpenAI
+OPENAI_API_KEY=your-openai-api-key
+```
+> **Note:** Embeddings are generated locally on your hardware via `SentenceTransformers` to prevent query-cost inflation and preserve strict IP confidentiality.
+
+---
+
+## 🔒 Security & Privacy Architecture
+
+What If Wizard was built with zero-trust principles in mind:
+1. **Local Uploading:** PDFs remain temporarily on your local system `uploads/` directory.
+2. **Client-Side Chunking:** Text chunks and structural embeddings are synthesized strictly by your CPU/GPU.
+3. **Ephemerality:** The query loop simply sends the strict text-snippets to the LLM. Whole documents are explicitly NOT hosted on external servers. 
+
+---
+<div align="center">
+  <p><i>Make informed agreements, safely. Built by Angelina Chatterjee.</i></p>
+</div>
